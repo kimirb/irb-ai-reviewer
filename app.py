@@ -143,6 +143,15 @@ with st.sidebar:
         </div>
     """, unsafe_allow_html=True)
 
+# 4. 파일 업로드 섹션
+st.subheader("📂 Submit IRB Documents")
+uploaded_files = st.file_uploader(
+    "연구계획서, 증례기록서, 연구자 서약서 등 PDF 파일을 모두 선택하여 업로드해 주세요.",
+    type=["pdf"],
+    accept_multiple_files=True,
+    key=f"file_uploader_{st.session_state.uploader_key}",
+)
+
 st.markdown("""
 <style>
 .st-key-clear_btn div[data-testid="stButton"] {
