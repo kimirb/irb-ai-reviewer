@@ -21,9 +21,9 @@ if "uploaded_files_signature" not in st.session_state:
 st.title("⚖️김안과병원 IRB AI 사전 행정검토")
 
 st.markdown("""
-    <div style="font-size: 17px; line-height: 1.6; color: #31333F; margin-top: 22px; margin-bottom: 22px;">
+    <div style="font-size: 17px; line-height: 1.6; color: #31333F; margin-top: 22px; margin-bottom: 10px;">
         본 시스템은 <b>김안과병원 연구자</b> 분들의 원활한 IRB 심의서류 작성을 위해, IRB 의뢰 전 
-        <b>후향적 연구 서류에 대한 AI 기반 사전 행정검토</b>를 지원합니다.<br>
+        <b>연구자 주도 후향적 연구 서류에 대한 AI 기반 사전 행정검토</b>를 지원합니다.<br>
         단, AI 검토 결과는 참고용으로만 활용하시기 바라며, IRB 행정간사의 공식 의견을 대변하지 않습니다.
     </div>
 """, unsafe_allow_html=True)
@@ -81,7 +81,7 @@ guide_btn = build_pdf_open_button_html(
 
 st.markdown(SIDEBAR_BUTTON_CSS, unsafe_allow_html=True)
 st.markdown(
-    f"""<div style="display:flex; flex-direction:row; justify-content:flex-start; gap:16px; margin-bottom:22px;">
+    f"""<div style="display:flex; flex-direction:row; justify-content:flex-start; gap:16px; margin-bottom:0px;">
         <div style="width: 280px;">{e_irb_btn}</div>
         <div style="width: 280px;">{guide_btn}</div>
     </div>""",
@@ -89,7 +89,7 @@ st.markdown(
 )
 # ────────────────────────────────────────────────────────
 
-st.markdown("---")
+st.markdown('<hr style="border: 0; border-top: 1px solid #e2e8f0; margin-top: 25px; margin-bottom: 15px;">', unsafe_allow_html=True)
 
 # 3. 사이드바 (제출 서류 안내, 지적 사항, 문의처 포함 - 상단 버튼 제거됨)
 with st.sidebar:
