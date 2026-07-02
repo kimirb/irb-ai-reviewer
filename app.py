@@ -23,7 +23,7 @@ st.title("⚖️김안과병원 IRB AI 사전 행정검토")
 st.markdown("""
     <div style="font-size: 17px; line-height: 1.6; color: #31333F; margin-top: 22px; margin-bottom: 10px;">
         본 시스템은 <b>김안과병원 연구자</b> 분들의 원활한 IRB 심의서류 작성을 위해, IRB 의뢰 전 
-        <b>연구자 주도 후향적 연구 서류에 대한 AI 기반 사전 행정검토</b>를 지원합니다.<br>
+        <b>연구자주도 후향적 연구 서류</b>에 대한 <b>AI 기반 사전 행정검토</b>를 지원합니다.<br>
         단, AI 검토 결과는 참고용으로만 활용하시기 바라며, IRB 행정간사의 공식 의견을 대변하지 않습니다.
     </div>
 """, unsafe_allow_html=True)
