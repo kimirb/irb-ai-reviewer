@@ -75,7 +75,7 @@ e_irb_btn = build_link_button_html(
 )
 guide_btn = build_pdf_open_button_html(
     "e-IRB 신청서 작성 가이드 열기",
-    "forms/김안과병원 IRB 후향적 차트리뷰 신청 가이드(2026.07.01).pdf",
+    "forms/Retro_guide.pdf",
     color="#0f766e",
 )
 
