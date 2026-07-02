@@ -152,17 +152,30 @@ uploaded_files = st.file_uploader(
     key=f"file_uploader_{st.session_state.uploader_key}",
 )
 
+# 삭제 버튼을 업로더 바로 아래, 작은 텍스트 링크처럼 보이게 스타일링
 st.markdown("""
 <style>
-div[data-testid="stButton"] button[kind="secondary"].clear-btn {
-    all: unset; cursor: pointer; color: #94a3b8; font-size: 13px;
+.st-key-clear_btn { margin-top: -14px; }
+.st-key-clear_btn button {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    color: #94a3b8 !important;
+    font-size: 12px !important;
+    padding: 0 2px !important;
+    height: auto !important;
+    min-height: 0 !important;
+}
+.st-key-clear_btn button:hover {
+    color: #ef4444 !important;
+    background: transparent !important;
 }
 </style>
 """, unsafe_allow_html=True)
 
 _, col_clear = st.columns([6, 1])
 with col_clear:
-    if st.button("🗑️ 전체 삭제", key="clear_btn", type="secondary"):
+    if st.button("🗑️ 전체 삭제", key="clear_btn"):
         st.session_state.uploader_key += 1
         st.session_state.ai_result = None
         st.session_state.uploaded_files_signature = ()
