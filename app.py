@@ -16,6 +16,8 @@ if "ai_result" not in st.session_state:
     st.session_state.ai_result = None
 if "uploaded_files_signature" not in st.session_state:
     st.session_state.uploaded_files_signature = ()
+if "uploader_key" not in st.session_state:      # ← 추가
+    st.session_state.uploader_key = 0           # ← 추가
 
 # 2. 메인 타이틀 및 상단 디자인
 st.title("⚖️김안과병원 IRB AI 사전 행정검토")
@@ -143,11 +145,21 @@ with st.sidebar:
 
 # 4. 파일 업로드 섹션
 st.subheader("📂 Submit IRB Documents")
-uploaded_files = st.file_uploader(
-    "연구계획서, 증례기록서, 연구자 서약서 등 PDF 파일을 모두 선택하여 업로드해 주세요.", 
-    type=["pdf"], 
-    accept_multiple_files=True
-)
+
+col_upload, col_clear = st.columns([5, 1])          # ← 추가: 버튼 배치용 컬럼
+with col_upload:
+    uploaded_files = st.file_uploader(
+        "연구계획서, 증례기록서, 연구자 서약서 등 PDF 파일을 모두 선택하여 업로드해 주세요.",
+        type=["pdf"],
+        accept_multiple_files=True,
+        key=f"file_uploader_{st.session_state.uploader_key}",   # ← 추가: key 부여
+    )
+with col_clear:
+    if st.button("🗑️ 전체 삭제", use_container_width=True):     # ← 추가: 삭제 버튼
+        st.session_state.uploader_key += 1
+        st.session_state.ai_result = None
+        st.session_state.uploaded_files_signature = ()
+        st.rerun()
 
 # 업로드된 파일 구성(파일명+크기)이 이전과 달라지면 이전 검토 결과를 자동으로 무효화
 current_files_signature = tuple(sorted((f.name, f.size) for f in uploaded_files)) if uploaded_files else ()
