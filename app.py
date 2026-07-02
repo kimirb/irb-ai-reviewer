@@ -41,14 +41,18 @@ SIDEBAR_BUTTON_CSS = """
 
 def build_pdf_open_button_html(label, pdf_path, color="#0f766e"):
     if not os.path.exists(pdf_path):
-        # 서버에 파일이 아직 없는 경우, 앱이 죽지 않고 안내 문구만 표시합니다.
         return f"""<div style="font-size: 12px; color: #b91c1c; margin: 2px 0 8px 0;">
             ⚠️ {html.escape(label)} 파일이 서버에 없습니다. (경로: {html.escape(pdf_path)})
         </div>"""
     with open(pdf_path, "rb") as f:
         pdf_bytes = f.read()
     b64_pdf = base64.b64encode(pdf_bytes).decode("utf-8")
-    return f"""<a href="data:application/pdf;base64,{b64_pdf}" target="_blank" class="sidebar-btn"
+    
+    # 💡 1. 파일 경로에서 이름만 쏙 뽑아옵니다 (Retro_guide.pdf)
+    file_name = os.path.basename(pdf_path)
+    
+    # 💡 2. target="_blank"를 지우고, download="{file_name}"을 넣어줍니다!
+    return f"""<a href="data:application/pdf;base64,{b64_pdf}" download="{file_name}" class="sidebar-btn"
            style="display:flex; align-items:center; justify-content:center; width:100%;
                   box-sizing:border-box; padding:9px 14px; background-color:{color};
                   color:#ffffff !important; border-radius:8px; font-size:14px; font-weight:600;
