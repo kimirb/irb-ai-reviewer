@@ -152,31 +152,14 @@ uploaded_files = st.file_uploader(
     key=f"file_uploader_{st.session_state.uploader_key}",
 )
 
+# 오른쪽 정렬용 래퍼만 최소한으로 스타일링 (버튼 자체는 손대지 않음)
 st.markdown("""
 <style>
-.st-key-clear_btn div[data-testid="stButton"] {
-    width: fit-content !important;
-    margin-left: auto !important;
-    margin-top: -14px;
-}
-.st-key-clear_btn button {
-    background: transparent !important;
-    border: none !important;
-    box-shadow: none !important;
-    color: #94a3b8 !important;
-    font-size: 12px !important;
-    padding: 0 2px !important;
-    height: auto !important;
-    min-height: 0 !important;
-}
-.st-key-clear_btn button:hover {
-    color: #ef4444 !important;
-    background: transparent !important;
-}
+.st-key-clear_btn { display: flex; justify-content: flex-end; margin-top: -10px; }
 </style>
 """, unsafe_allow_html=True)
 
-if st.button("🗑️ 전체 삭제", key="clear_btn"):
+if st.button("🗑️ 전체 삭제", key="clear_btn", type="tertiary"):
     st.session_state.uploader_key += 1
     st.session_state.ai_result = None
     st.session_state.uploaded_files_signature = ()
