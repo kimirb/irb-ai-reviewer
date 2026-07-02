@@ -152,15 +152,13 @@ uploaded_files = st.file_uploader(
     key=f"file_uploader_{st.session_state.uploader_key}",
 )
 
-# 삭제 버튼: 컬럼 분할 없이, 업로더와 동일한 전체 폭 컨테이너를 오른쪽 정렬
 st.markdown("""
 <style>
-.st-key-clear_btn {
-    display: flex;
-    justify-content: flex-end;
-    margin-top: -14px;
-}
+.st-key-clear_btn { margin-top: -14px; }
 .st-key-clear_btn button {
+    width: fit-content !important;
+    margin-left: auto !important;
+    display: flex !important;
     background: transparent !important;
     border: none !important;
     box-shadow: none !important;
@@ -169,7 +167,6 @@ st.markdown("""
     padding: 0 2px !important;
     height: auto !important;
     min-height: 0 !important;
-    width: auto !important;
 }
 .st-key-clear_btn button:hover {
     color: #ef4444 !important;
