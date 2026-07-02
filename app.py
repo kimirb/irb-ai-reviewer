@@ -145,17 +145,24 @@ with st.sidebar:
 
 # 4. 파일 업로드 섹션
 st.subheader("📂 Submit IRB Documents")
+uploaded_files = st.file_uploader(
+    "연구계획서, 증례기록서, 연구자 서약서 등 PDF 파일을 모두 선택하여 업로드해 주세요.",
+    type=["pdf"],
+    accept_multiple_files=True,
+    key=f"file_uploader_{st.session_state.uploader_key}",
+)
 
-col_upload, col_clear = st.columns([5, 1])          # ← 추가: 버튼 배치용 컬럼
-with col_upload:
-    uploaded_files = st.file_uploader(
-        "연구계획서, 증례기록서, 연구자 서약서 등 PDF 파일을 모두 선택하여 업로드해 주세요.",
-        type=["pdf"],
-        accept_multiple_files=True,
-        key=f"file_uploader_{st.session_state.uploader_key}",   # ← 추가: key 부여
-    )
+st.markdown("""
+<style>
+div[data-testid="stButton"] button[kind="secondary"].clear-btn {
+    all: unset; cursor: pointer; color: #94a3b8; font-size: 13px;
+}
+</style>
+""", unsafe_allow_html=True)
+
+_, col_clear = st.columns([6, 1])
 with col_clear:
-    if st.button("🗑️ 전체 삭제", use_container_width=True):     # ← 추가: 삭제 버튼
+    if st.button("🗑️ 전체 삭제", key="clear_btn", type="secondary"):
         st.session_state.uploader_key += 1
         st.session_state.ai_result = None
         st.session_state.uploaded_files_signature = ()
