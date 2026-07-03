@@ -115,7 +115,7 @@ with st.sidebar:
     """, unsafe_allow_html=True)
     
     st.markdown("""
-    <h2 style="margin-top: -5px; margin-bottom: 10px; font-size: 20px; font-weight: 700;">📁 후향적 연구 제출 서류</h2>
+    <h2 style="margin-top: -25px; margin-bottom: 10px; font-size: 20px; font-weight: 700;">📁 후향적 연구 제출 서류</h2>
     <small style="color: #666; display: block; margin-bottom: 12px;">사전 검토를 위해 아래 서류들을 모두 업로드창에 드래그하여 넣어주세요.</small>
     
     <div style="line-height: 1.9; font-size: 15px; color: #31333F;">
