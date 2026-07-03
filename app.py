@@ -167,8 +167,8 @@ st.markdown("""
 .st-key-upload_area { position: relative; }
 .st-key-clear_btn {
     position: absolute;
-    bottom: 6px;
-    right: 6px;
+    bottom: 10px;
+    right: 10px;
     margin: 0 !important;
     z-index: 10;
 }
