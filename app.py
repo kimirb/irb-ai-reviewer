@@ -71,8 +71,6 @@ def build_link_button_html(label, url, color="#1e3a5f", icon="🔗"):
             {icon}&nbsp; {html.escape(label)}
         </a>"""
 
-
-# ── 수정된 부분: 사이드바에 있던 버튼을 메인 화면 중앙(가로형)으로 배치 ──
 e_irb_btn = build_link_button_html(
     "김안과병원 e-IRB 바로가기",
     "https://r-bay.co.kr/agency/main/enh5TE5EYlBUZ1hnZElnaXNidjczdz09",
@@ -97,7 +95,7 @@ st.markdown(
 
 st.markdown('<hr style="border: 0; border-top: 1px solid #e2e8f0; margin-top: 25px; margin-bottom: 15px;">', unsafe_allow_html=True)
 
-# 3. 사이드바 (제출 서류 안내, 지적 사항, 문의처 포함 - 상단 버튼 제거됨)
+# 3. 사이드바 (제출 서류 안내, 지적 사항, 문의처 포함)
 with st.sidebar:
     st.markdown("""
     <style>    
@@ -115,8 +113,9 @@ with st.sidebar:
     }
     </style>
     """, unsafe_allow_html=True)
+    
     st.markdown("""
-    <h2 style="margin-top: 0px; margin-bottom: 10px; font-size: 20px; font-weight: 700;">📁 후향적 연구 제출 서류</h2>
+    <h2 style="margin-top: -5px; margin-bottom: 10px; font-size: 20px; font-weight: 700;">📁 후향적 연구 제출 서류</h2>
     <small style="color: #666; display: block; margin-bottom: 12px;">사전 검토를 위해 아래 서류들을 모두 업로드창에 드래그하여 넣어주세요.</small>
     
     <div style="line-height: 1.9; font-size: 15px; color: #31333F;">
