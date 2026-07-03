@@ -544,6 +544,14 @@ if uploaded_files:
                 finish_reason = getattr(candidates[0], "finish_reason", None)
                 finish_reason = getattr(finish_reason, "name", finish_reason)
 
+            st.markdown("""
+                <style>
+                div[data-testid="stAlertContentError"] p {
+                    font-size: 15px !important;
+                }
+                </style>
+                """, unsafe_allow_html=True)
+
             if not getattr(response, "parts", None):
                 if finish_reason == "SAFETY":
                     st.error(
