@@ -102,7 +102,7 @@ with st.sidebar:
     st.markdown("""
     <style>    
     section[data-testid="stSidebar"] div[data-testid="stSidebarUserContent"] {
-        padding-top: 0.5rem !important;
+        padding-top: 0rem !important;
     }
     section[data-testid="stSidebar"] div[data-testid="stSidebarHeader"] {
         padding-top: 0rem !important;
