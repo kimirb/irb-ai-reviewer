@@ -452,14 +452,13 @@ if uploaded_files:
         </div>
         """, unsafe_allow_html=True)
 
-            st.markdown("""
-                <style>
-                div[data-testid="stAlertContentError"] p {
-                    font-size: 12px !important;
-                }
-                </style>
-                """, unsafe_allow_html=True)
-        
+        st.markdown("""
+            <style>
+            div[data-testid="stAlertContentError"] p {
+                font-size: 12px !important;
+            }
+            </style>
+            """, unsafe_allow_html=True)        
         try:
             import google.generativeai as genai
             import fitz  # PyMuPDF
