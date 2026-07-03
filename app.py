@@ -156,7 +156,7 @@ with upload_area:
         key=f"file_uploader_{st.session_state.uploader_key}",
     )
 
-    if st.button("🗑️ 전체 삭제", key="clear_btn", type="tertiary"):
+    if st.button("🗑️", key="clear_btn", type="tertiary"):
         st.session_state.uploader_key += 1
         st.session_state.ai_result = None
         st.session_state.uploaded_files_signature = ()
@@ -167,8 +167,8 @@ st.markdown("""
 .st-key-upload_area { position: relative; }
 .st-key-clear_btn {
     position: absolute;
-    bottom: 10px;
-    right: 10px;
+    bottom: 11px;
+    right: 11px;
     margin: 0 !important;
     z-index: 10;
 }
