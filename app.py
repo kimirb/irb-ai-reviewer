@@ -100,7 +100,10 @@ st.markdown('<hr style="border: 0; border-top: 1px solid #e2e8f0; margin-top: 25
 # 3. 사이드바 (제출 서류 안내, 지적 사항, 문의처 포함 - 상단 버튼 제거됨)
 with st.sidebar:
     st.markdown("""
-    <style>
+    <style>    
+    section[data-testid="stSidebar"] div[data-testid="stSidebarUserContent"] {
+        padding-top: 0.5rem !important;
+    }
     section[data-testid="stSidebar"] div[data-testid="stSidebarHeader"] {
         padding-top: 0rem !important;
         padding-bottom: 0rem !important;
