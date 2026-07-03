@@ -510,7 +510,7 @@ if uploaded_files:
                     else:                         # 일반 A4 세로형 문서
                         page_dpi = 150
                     pix = page.get_pixmap(dpi=page_dpi)
-                    img_data = pix.tobytes("png")
+                    img_data = pix.tobytes("jpeg", jpg_quality=85)
 
                     # ★핵심 보완: 이미지(시각 인식)만으로는 좁은 칸에 빽빽하게 들어간
                     # CRF 표 헤더 글자를 놓치거나 다른 글자로 오독하는 사고가 반복된다.
