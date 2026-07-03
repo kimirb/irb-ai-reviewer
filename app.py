@@ -451,6 +451,14 @@ if uploaded_files:
             <div style="font-size: 15px; color: #64748b; margin-top: 8px;">(파일 용량에 따라 최대 5분 정도 소요되니 잠시만 기다려 주세요!)</div>
         </div>
         """, unsafe_allow_html=True)
+
+            st.markdown("""
+                <style>
+                div[data-testid="stAlertContentError"] p {
+                    font-size: 12px !important;
+                }
+                </style>
+                """, unsafe_allow_html=True)
         
         try:
             import google.generativeai as genai
@@ -543,14 +551,6 @@ if uploaded_files:
             if candidates:
                 finish_reason = getattr(candidates[0], "finish_reason", None)
                 finish_reason = getattr(finish_reason, "name", finish_reason)
-
-            st.markdown("""
-                <style>
-                div[data-testid="stAlertContentError"] p {
-                    font-size: 12px !important;
-                }
-                </style>
-                """, unsafe_allow_html=True)
 
             if not getattr(response, "parts", None):
                 if finish_reason == "SAFETY":
