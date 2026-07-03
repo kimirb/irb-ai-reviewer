@@ -455,7 +455,7 @@ if uploaded_files:
         st.markdown("""
             <style>
             div[data-testid="stAlertContentError"] p {
-                font-size: 12px !important;
+                font-size: 15px !important;
             }
             </style>
             """, unsafe_allow_html=True)        
