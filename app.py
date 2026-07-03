@@ -100,6 +100,11 @@ st.markdown('<hr style="border: 0; border-top: 1px solid #e2e8f0; margin-top: 25
 # 3. 사이드바 (제출 서류 안내, 지적 사항, 문의처 포함 - 상단 버튼 제거됨)
 with st.sidebar:
     st.markdown("""
+    <style>
+    section[data-testid="stSidebar"] .block-container { padding-top: 1.5rem !important; }
+    </style>
+    """, unsafe_allow_html=True)
+    st.markdown("""
     <h2 style="margin-top: 0px; margin-bottom: 10px; font-size: 20px; font-weight: 700;">📁 후향적 연구 제출 서류</h2>
     <small style="color: #666; display: block; margin-bottom: 12px;">사전 검토를 위해 아래 서류들을 모두 업로드창에 드래그하여 넣어주세요.</small>
     
@@ -134,9 +139,9 @@ with st.sidebar:
         <li style="margin-bottom: 8px;"><b>수집항목 일치</b><br>연구계획서와 증례기록서 수집항목 100% 동일하게 작성</li>
         <li style="margin-bottom: 8px;"><b>수집불가 항목🚨</b><br>이름, 주민등록번호, 생년월일, 병원등록번호, 주소 등 개인정보 수집 불가</li>
     </ul>
-    """, unsafe_allow_html=True)
-
-    st.markdown("---")
+        <hr style="border: 0; border-top: 1px solid #e2e8f0; margin-top: 8px; margin-bottom: 15px;">
+        """, unsafe_allow_html=True)
+        
     st.markdown("""
         <div style="line-height: 1; font-size: 15px; color: #31333F;">
             ▪️문의 : IRB사무국(02-2639-7812 / 내선 812)
