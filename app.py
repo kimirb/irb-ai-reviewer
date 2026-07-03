@@ -108,12 +108,11 @@ with st.sidebar:
     section[data-testid="stSidebar"] div[data-testid="stSidebarUserContent"] {
         padding-top: 0rem !important;
     }
-    section[data-testid="stSidebar"] div[data-testid="stSidebarHeader"] {
-        min-height: 0 !important;
-        height: auto !important;
-        padding-top: 0rem !important;
-        padding-bottom: 0rem !important;
-    }   
+    section[data-testid="stSidebar"] div[data-testid="stSidebarHeader"] button {
+        min-width: 1.25rem !important;
+        min-height: 1.25rem !important;
+        padding: 0px !important;
+    } 
     </style>
     """, unsafe_allow_html=True)
     st.markdown("""
