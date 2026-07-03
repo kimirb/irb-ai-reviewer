@@ -675,9 +675,20 @@ if uploaded_files:
             # 사용자에게 직접 안내해 혼란을 줄입니다.
             if "429" in error_str or "quota" in error_str.lower():
                 import re
-                retry_match = re.search(r"retry_delay\s*\{\s*seconds:\s*(\d+)", error_str)
-                retry_sec = retry_match.group(1) if retry_match else None
-                wait_msg = f" (약 {retry_sec}초 후 재시도 가능)" if retry_sec else ""
+                # 에러 안에 분당/일일 한도가 동시에 여러 개 실려올 수 있으므로 전부 추출
+                retry_delays = [int(s) for s in re.findall(r"retry_delay\s*\{\s*seconds:\s*(\d+)", error_str)]
+                quota_ids = re.findall(r'quota_id:\s*"([^"]+)"', error_str)
+            
+                is_daily_limit = any("PerDay" in qid for qid in quota_ids)
+                max_retry_sec = max(retry_delays) if retry_delays else None
+            
+                if is_daily_limit:
+                    wait_msg = " (일일 사용 한도 초과 - 태평양시간 기준 자정에 초기화되며, 그 전까지는 재시도해도 계속 실패합니다)"
+                elif max_retry_sec:
+                    wait_msg = f" (약 {max_retry_sec}초 후 재시도 가능)"
+                else:
+                    wait_msg = ""
+            
                 st.error(
                     f"⚠️ AI 서비스의 일일/분당 사용 한도를 초과했습니다{wait_msg}. "
                     f"잠시 후 다시 시도해 주시고, 한도 초과가 자주 발생하면 IRB사무국에 API 사용량 한도 증설을 요청해 주세요."
