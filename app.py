@@ -576,19 +576,18 @@ if uploaded_files:
             loading_placeholder.empty()
             error_str = str(e)
 
-            # Gemini API 할당량(429) 및 리소스 초과 에러 상세 분류
+            # Gemini API 할당량(429) 및 리소스 초과, 서버 장애(503) 에러 상세 분류
             if "429" in error_str or "quota" in error_str.lower() or "resourceexhausted" in error_str.lower():
                 error_lower = error_str.lower()
                 
                 # 1. 일일 한도 초과 카메라에 걸린 경우 (RPD)
                 if "per day" in error_lower or "perday" in error_lower:
-                    # 💡 Streamlit 서버(UTC) 기준으로 한국 시간 오후 4시는 오전 7시입니다.
-                    # 이를 계산하여 오후 4시 전이면 '오늘', 후면 '내일'로 문구를 자동 변경합니다!
-                    import datetime
-                    current_utc_hour = datetime.datetime.now(datetime.timezone.utc).hour
-                    reset_day = "오늘" if current_utc_hour < 7 else "내일"
-                    
-                    st.error(f"⚠️ [일일 한도 초과] 오늘 무료로 사용할 수 있는 AI 검토 횟수를 모두 소진했습니다. {reset_day} 오후 4시 이후에 다시 시도해 주세요.")
+                    st.error(
+                        "⚠️ [일일 한도 초과] 오늘 무료로 사용할 수 있는 AI 검토 횟수를 모두 소진했습니다. "
+                        "일반적으로 태평양시간 자정(한국 시간 오후~밤 사이) 즈음 초기화되지만, 정확한 리셋 시점은 "
+                        "사용 패턴에 따라 달라질 수 있습니다. 실시간 잔여 한도는 "
+                        "[Google AI Studio '비율 제한' 페이지](https://aistudio.google.com/rate-limit)에서 확인하실 수 있습니다."
+                    )
                 
                 # 2. 분당 데이터 한도 카메라에 걸린 경우 (TPM)
                 elif "tokens per minute" in error_lower or "bytes per minute" in error_lower:
@@ -601,7 +600,14 @@ if uploaded_files:
                 # 4. 기타 원인 모를 한도 초과
                 else:
                     st.error("⚠️ [일시적 사용량 초과] AI 서버에 데이터가 몰려 처리하지 못했습니다. 약 1~2분 후 다시 시도해 주세요.")
-                    
+
+            # Google 서버 자체의 일시적 장애 (사용자/할당량 문제 아님)
+            elif "503" in error_str or "unavailable" in error_str.lower() or "servererror" in error_str.lower():
+                st.error(
+                    "⚠️ [Google 서버 일시 장애] 현재 AI 서버 자체가 일시적으로 불안정한 상태입니다 (사용 한도 문제가 아닙니다). "
+                    "잠시 후(약 1~2분) 다시 시도해 주세요."
+                )
+
             else:
                 # API 한도 문제가 아닌 진짜 시스템 오류일 때
                 st.error("⚠️ 검토 처리 중 알 수 없는 오류가 발생했습니다. 잠시 후 다시 시도해 주시고, 문제가 계속되면 IRB사무국으로 문의해 주세요.")
