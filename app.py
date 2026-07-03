@@ -101,7 +101,7 @@ st.markdown('<hr style="border: 0; border-top: 1px solid #e2e8f0; margin-top: 25
 with st.sidebar:
     st.markdown("""
     <style>
-    section[data-testid="stSidebar"] .block-container { padding-top: 0.5rem !important; }
+    section[data-testid="stSidebar"] .block-container { padding-top: -1.5rem !important; }
     </style>
     """, unsafe_allow_html=True)
     st.markdown("""
@@ -223,140 +223,6 @@ def split_recommendation_section(md_text):
             items.append(cleaned)
 
     return before.strip(), (items if items else None)
-
-
-# 마크다운 결과를 고급진 병원 보고서 스타일 HTML로 바꿔주는 변환 함수 (청록색 테마)
-def convert_md_to_html(md_text):
-    import html as html_module
-
-    def escape_cell(text):
-        """표 셀 텍스트를 안전하게 변환: HTML 특수문자는 이스케이프하고,
-        AI가 줄바꿈 의도로 넣은 <br> 표기(대소문자/공백 변형 포함)만 실제 줄바꿈으로 되살린다."""
-        import re
-        escaped = html_module.escape(text)
-        # html.escape 이후에는 <br>도 &lt;br&gt;로 이스케이프되므로, 그 형태를 다시 찾아 줄바꿈으로 치환
-        return re.sub(r'&lt;\s*br\s*/?\s*&gt;', '<br>', escaped, flags=re.IGNORECASE)
-
-    main_text, recommendations = split_recommendation_section(md_text)
-    lines = main_text.split('\n')
-    html = """
-    <html>
-    <head>
-        <meta charset="utf-8">
-        <style>
-            body { font-family: 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; padding: 35px; color: #333333; line-height: 1.7; background-color: #f0f4f4; }
-            .report-card { background: white; padding: 45px; border-radius: 16px; box-shadow: 0 4px 25px rgba(0,0,0,0.1); max-width: 950px; margin: 0 auto; border-top: 10px solid #0f766e; }
-            
-            /* 1. 제목을 굵은 검정색 폰트로 변경 */
-            .header-title { color: #000000; font-weight: 900; border-bottom: 3px solid #ccf2f4; padding-bottom: 15px; margin-top: 0; font-size: 24px; display: flex; align-items: center; }
-            
-            /* 4. 표 열 넓이 강제 고정 (구분 열 약 1.5배 확장) */
-            th:nth-child(1) { width: 16%; } /* 구분 */
-            th:nth-child(2) { width: 22%; } /* 검토 항목 */
-            th:nth-child(3) { width: 10%; } /* 검토 결과 */
-            th:nth-child(4) { width: 52%; } /* 상세 내용 */
-            
-            h3 { color: #134e4a; margin-top: 30px; border-left: 4px solid #0f766e; padding-left: 10px; font-size: 18px; }
-            table { width: 100%; border-collapse: collapse; margin: 22px 0; font-size: 14px; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
-            th, td { border: 1px solid #cbd5e1; padding: 14px; text-align: left; word-break: keep-all; overflow-wrap: break-word; }
-            th { background-color: #f0fdfa; color: #134e4a; font-weight: bold; text-align: center; } 
-            tr:nth-child(even) { background-color: #f9fdfd; }
-            .badge-boan { background-color: #ffe4e6; color: #e11d48; padding: 4px 12px; border-radius: 20px; font-weight: bold; font-size: 12px; display: inline-block; border: 1px solid #fecdd3; white-space: nowrap; word-break: keep-all; }
-            .success-msg { background-color: #f0fdf4; color: #16a34a; padding: 25px; border-radius: 10px; border-left: 6px solid #16a34a; font-size: 16px; font-weight: bold; margin: 20px 0; }
-            .recommend-box { background-color: #f0f9ff; border: 1px solid #bae6fd; border-left: 6px solid #0284c7; border-radius: 10px; padding: 20px 25px; margin: 22px 0; font-size: 15px; }
-            .recommend-box .recommend-title { color: #075985; font-weight: bold; font-size: 11px; margin-bottom: 10px; }
-            .recommend-box ol { margin: 0; padding-left: 20px; }
-            .recommend-box li { color: #0c4a6e; margin-bottom: 6px; }
-            ul { padding-left: 22px; }
-            li { margin-bottom: 8px; color: #475569; }
-            p { color: #334155; }
-        </style>
-    </head>
-    <body>
-        <div class="report-card">
-            <div class="header-title">⚖️ 김안과병원 IRB AI 사전 행정검토 결과 보고서</div>
-            
-            <div style="font-size: 15px; color: #475569; margin-top: 20px; margin-bottom: 25px; line-height: 1.8;">
-                김안과병원 IRB AI 사전 행정 검토 결과입니다.<br>
-                아래 표에 명시된 항목들에 대하여 보완이 필요하오니, 내용을 확인하시어 수정 후 제출하여 주시기 바랍니다.
-            </div>
-    """
-    
-    in_table = False
-    seen_content = False  # 표나 헤더(#)를 한 번이라도 만났는지 — 이후의 일반 텍스트는 보존 대상
-    for line in lines:
-        line = line.strip()
-        if not line:
-            continue
-        
-        # 표/헤더가 한 번도 등장하기 전까지의 순수 인사말("검토를 시작하겠습니다" 등)만 보고서에서 제외합니다.
-        # 헤더(#) 또는 표(|)를 한 번이라도 만난 뒤에는, 그 아래 이어지는 리스트나 설명문도 모두 보존합니다.
-        if not seen_content and not line.startswith('|') and not line.startswith('#'):
-            if "🎉 축하합니다!" not in line and "모든 행정 검토 항목이 '적절'합니다" not in line:
-                continue 
-
-        if line.startswith('|') or line.startswith('#'):
-            seen_content = True
-        
-        if line.startswith('|'):
-            parts = [p.strip() for p in line.split('|')[1:-1]]
-            if '---' in line or (len(parts) > 0 and parts[0].startswith(':---')):
-                continue
-            
-            if not in_table:
-                html += "<table><thead><tr>"
-                for p in parts:
-                    # 3. '검토 결과' 헤더만 콕 집어서 줄바꿈(<br>) 적용
-                    if p == "검토 결과":
-                        html += "<th>검토<br>결과</th>"
-                    else:
-                        html += f"<th>{escape_cell(p)}</th>"
-                html += "</tr></thead><tbody>"
-                in_table = True
-            else:
-                html += "<tr>"
-                for p in parts:
-                    if p == "보완":
-                        html += f'<td style="text-align: center;"><span class="badge-boan">{escape_cell(p)}</span></td>'
-                    else:
-                        html += f"<td>{escape_cell(p)}</td>"
-                html += "</tr>"
-        else:
-            if in_table:
-                html += "</tbody></table>"
-                in_table = False
-            
-            if "🎉 축하합니다!" in line or "모든 행정 검토 항목이 '적절'합니다" in line:
-                html += f'<div class="success-msg">{escape_cell(line)}</div>'
-            elif line.startswith('###'):
-                html += f"<h3>{escape_cell(line.replace('###','').strip())}</h3>"
-            elif line.startswith('##'):
-                html += f"<h3>{escape_cell(line.replace('##','').strip())}</h3>"
-            elif line.startswith('- ') or line.startswith('* '):
-                html += f"<li>{escape_cell(line[2:].strip())}</li>"
-            else:
-                html += f"<p>{escape_cell(line)}</p>"
-                
-    if in_table:
-        html += "</tbody></table>"
-
-    if recommendations:
-        html += '<div style="margin-top: 30px;">'
-        html += '<div style="font-weight: bold; font-size: 14px; color: #333333; margin-bottom: 8px;">📌 행정 권고사항</div>'
-        html += '<ol style="margin: 0; padding-left: 20px; font-size: 14px; color: #333333; line-height: 1.8;">'
-        for item in recommendations:
-            html += f"<li style='margin-bottom: 6px;'>{escape_cell(item)}</li>"
-        html += "</ol></div>"
-
-    html += """
-            <div style="margin-top: 40px; border-top: 1px solid #e2e8f0; padding-top: 15px; font-size: 12px; color: #94a3b8; text-align: center;">
-                본 보고서는 AI 기반 사전 행정검토 참고 자료이며 공식 심의 의견을 대변하지 않습니다.
-            </div>
-        </div>
-    </body>
-    </html>
-    """
-    return html
 
 # 현재 연도와 작년 연도를 자동으로 계산
 current_year = datetime.date.today().year
@@ -754,23 +620,3 @@ if uploaded_files:
             recommendation_html += "</ol></div>"
             
             st.markdown(recommendation_html, unsafe_allow_html=True)
-        
-        # 고품격 청록색 HTML 보고서 양식 추출 영역
-        st.markdown("---")
-        st.caption("🔽 검토 결과를 보고서 양식으로 다운로드할 수 있습니다.")
-        html_report_content = convert_md_to_html(st.session_state.ai_result)
-        
-        st.download_button(
-            label="📥 보고서 다운로드",
-            data=html_report_content,
-            file_name=f"IRB_AI_사전검토_보고서_{file_date_str}.html",
-            mime="text/html",
-            use_container_width=False
-        )
-        
-        # 💡 파란색 st.info 대신 연한 회색(Light Gray) HTML 박스로 변경
-        st.markdown("""
-        <div style="background-color: #f3f4f6; border-left: 6px solid #eac65a; border-radius: 6px; padding: 15px 20px; margin-top: 15px; color: #4b5563; font-size: 14px; line-height: 1.6;">
-            💡 <b>Tip : </b> 보고서를 다운로드하면 웹 보고서가 열립니다. 그 상태로 브라우저에서 인쇄(Ctrl + P)를 누르면 PDF 보고서로 바로 출력할 수 있습니다.
-        </div>
-        """, unsafe_allow_html=True)
