@@ -582,7 +582,13 @@ if uploaded_files:
                 
                 # 1. 일일 한도 초과 카메라에 걸린 경우 (RPD)
                 if "per day" in error_lower or "perday" in error_lower:
-                    st.error("⚠️ [일일 한도 초과] 오늘 무료로 사용할 수 있는 AI 검토 횟수를 모두 소진했습니다. 내일 오후 4시 이후에 다시 시도해 주세요.")
+                    # 💡 Streamlit 서버(UTC) 기준으로 한국 시간 오후 4시는 오전 7시입니다.
+                    # 이를 계산하여 오후 4시 전이면 '오늘', 후면 '내일'로 문구를 자동 변경합니다!
+                    import datetime
+                    current_utc_hour = datetime.datetime.now(datetime.timezone.utc).hour
+                    reset_day = "오늘" if current_utc_hour < 7 else "내일"
+                    
+                    st.error(f"⚠️ [일일 한도 초과] 오늘 무료로 사용할 수 있는 AI 검토 횟수를 모두 소진했습니다. {reset_day} 오후 4시 이후에 다시 시도해 주세요.")
                 
                 # 2. 분당 데이터 한도 카메라에 걸린 경우 (TPM)
                 elif "tokens per minute" in error_lower or "bytes per minute" in error_lower:
