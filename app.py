@@ -138,7 +138,7 @@ with st.sidebar:
     
     # 구분선(---) 바로 아래의 여백도 당겨줍니다(-25px)
     st.markdown("""
-    <h2 style="margin-top: -25px; margin-bottom: 0px; font-size: 20px; font-weight: 700;">📌 주요 지적 사항</h2>
+    <h2 style="margin-top: -25px; margin-bottom: 0px; font-size: 20px; font-weight: 700;">📌 주요 지적사항</h2>
     
     <ul style="font-size: 15px; line-height: 1.5; padding-left: 8px; color: #31333F; margin-top: 2px;">
         <li style="margin-bottom: 8px;"><b>연구계획서와 증례기록서</b><br>버전 및 유효일자 필수 (ex. V1.0, 2026.07.01)</li>
