@@ -576,31 +576,30 @@ if uploaded_files:
             loading_placeholder.empty()
             error_str = str(e)
 
-            # Gemini API 할당량(429) 초과는 API 키/시스템 정보 노출 우려가 없고, 원인이 명확하므로
-            # 사용자에게 직접 안내해 혼란을 줄입니다.
-            if "429" in error_str or "quota" in error_str.lower():
-                import re
-                # 에러 안에 분당/일일 한도가 동시에 여러 개 실려올 수 있으므로 전부 추출
-                retry_delays = [int(s) for s in re.findall(r"retry_delay\s*\{\s*seconds:\s*(\d+)", error_str)]
-                quota_ids = re.findall(r'quota_id:\s*"([^"]+)"', error_str)
-            
-                is_daily_limit = any("PerDay" in qid for qid in quota_ids)
-                max_retry_sec = max(retry_delays) if retry_delays else None
-            
-                if is_daily_limit:
-                    wait_msg = " (일일 사용 한도 초과 - 태평양시간 기준 자정에 초기화되며, 그 전까지는 재시도해도 계속 실패합니다)"
-                elif max_retry_sec:
-                    wait_msg = f" (약 {max_retry_sec}초 후 재시도 가능)"
+            # Gemini API 할당량(429) 및 리소스 초과 에러 상세 분류
+            if "429" in error_str or "quota" in error_str.lower() or "resourceexhausted" in error_str.lower():
+                error_lower = error_str.lower()
+                
+                # 1. 일일 한도 초과 카메라에 걸린 경우 (RPD)
+                if "per day" in error_lower or "perday" in error_lower:
+                    st.error("⚠️ [일일 한도 초과] 오늘 무료로 사용할 수 있는 AI 검토 횟수를 모두 소진했습니다. 내일 오후 4시 이후에 다시 시도해 주세요.")
+                
+                # 2. 분당 데이터 한도 카메라에 걸린 경우 (TPM)
+                elif "tokens per minute" in error_lower or "bytes per minute" in error_lower:
+                    st.error("⚠️ [데이터 과부하] 한 번에 너무 많은 페이지가 전송되었습니다. 1~2분 정도 기다리신 후 다시 시도하시거나, 서류를 조금 나눠서 올려주세요!")
+                
+                # 3. 분당 횟수 한도 카메라에 걸린 경우 (RPM)
+                elif "requests per minute" in error_lower:
+                    st.error("⚠️ [단기 횟수 초과] 짧은 시간에 너무 여러 번 검토를 요청했습니다. 약 1분 정도만 기다리신 후 다시 버튼을 눌러주세요.")
+                
+                # 4. 기타 원인 모를 한도 초과
                 else:
-                    wait_msg = ""
-            
-                st.error(
-                    f"⚠️ AI 서비스의 일일/분당 사용 한도를 초과했습니다{wait_msg}. "
-                    f"잠시 후 다시 시도해 주시고, 한도 초과가 자주 발생하면 IRB사무국에 API 사용량 한도 증설을 요청해 주세요."
-                )
+                    st.error("⚠️ [일시적 사용량 초과] AI 서버에 데이터가 몰려 처리하지 못했습니다. 약 1~2분 후 다시 시도해 주세요.")
+                    
             else:
-                # 사용자에게는 내부 오류 메시지를 노출하지 않고, 서버 콘솔 로그에만 상세 내용을 남깁니다.
-                st.error("⚠️ 검토 처리 중 오류가 발생했습니다. 잠시 후 다시 시도해 주시고, 문제가 계속되면 IRB사무국으로 문의해 주세요.")
+                # API 한도 문제가 아닌 진짜 시스템 오류일 때
+                st.error("⚠️ 검토 처리 중 알 수 없는 오류가 발생했습니다. 잠시 후 다시 시도해 주시고, 문제가 계속되면 IRB사무국으로 문의해 주세요.")
+            
             print(f"[ERROR] AI 검토 처리 중 예외 발생: {error_str}")
 
     # 금고에 AI 결과 데이터가 들어있다면 화면에 고정 출력합니다.
