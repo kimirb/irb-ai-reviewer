@@ -101,7 +101,7 @@ st.markdown('<hr style="border: 0; border-top: 1px solid #e2e8f0; margin-top: 25
 with st.sidebar:
     st.markdown("""
     <style>
-    section[data-testid="stSidebar"] .block-container { padding-top: -1.5rem !important; }
+    section[data-testid="stSidebar"] .block-container {padding-top: 0rem !important; margin-top: -1.5rem !important; }
     </style>
     """, unsafe_allow_html=True)
     st.markdown("""
