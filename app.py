@@ -156,6 +156,23 @@ uploaded_files = st.file_uploader(
 st.markdown("""
 <style>
 .st-key-clear_btn { display: flex; justify-content: flex-end; margin-top: -10px; }
+.st-key-clear_btn div.stButton > button {
+    border: none !important;
+}
+.st-key-clear_btn div.stButton > button:hover {
+    background-color: transparent !important;
+    border: none !important;
+}
+.st-key-clear_btn div.stButton > button,
+.st-key-clear_btn div.stButton > button p {
+    font-weight: 400 !important;
+    font-size: 12px !important;
+    color: #94a3b8 !important;
+}
+.st-key-clear_btn div.stButton > button:hover,
+.st-key-clear_btn div.stButton > button:hover p {
+    color: #ef4444 !important;
+}
 </style>
 """, unsafe_allow_html=True)
 
@@ -488,24 +505,7 @@ if uploaded_files:
         border: 2.5px solid #ff0000 !important;
         color: #000000 !important;
     }
-    /* 전체 삭제 버튼만 전역 강조 스타일에서 제외 */
-    .st-key-clear_btn div.stButton > button {
-        border: none !important;
-    }
-    .st-key-clear_btn div.stButton > button:hover {
-        background-color: transparent !important;
-        border: none !important;
-    }
-    .st-key-clear_btn div.stButton > button,
-    .st-key-clear_btn div.stButton > button p {
-        font-weight: 400 !important;
-        font-size: 12px !important;
-        color: #94a3b8 !important;
-    }
-    .st-key-clear_btn div.stButton > button:hover,
-    .st-key-clear_btn div.stButton > button:hover p {
-        color: #ef4444 !important;
-    }
+   
     </style>
     """, unsafe_allow_html=True)
     
